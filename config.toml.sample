@@ -2,16 +2,16 @@
 # Unzip4win config file.
 # -----------------------------------------------------------------------------
 [output]
-save_current = true
-output_path = "/path/to/output/dir/if/save_current/is/false"
+saveCurent = true
+outputPath = "/path/to/output/dir/if/save_current/is/false"
 
 [password]
-try_days = 10
+tryDays = 10
 
 [[spec]]
 format = "password20060102"
-start_date = 2019-02-01
+startDate = 2019-02-01
 
 [[spec]]
 format = "20060102password"
-start_date = 2019-01-01
+startDate = 2019-01-01
