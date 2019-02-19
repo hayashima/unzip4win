@@ -2,7 +2,9 @@ package unzip4win
 
 import (
 	"flag"
+	"fmt"
 	"github.com/BurntSushi/toml"
+	"os"
 	"sort"
 	"time"
 )
@@ -14,18 +16,28 @@ type Arguments struct {
 }
 
 func ParseArgs() *Arguments {
+	flag.Usage = func() {
+		_, _ = fmt.Fprintf(os.Stderr, `Usage of Unzip4win:
+  %s [OPITIONS] <zip-file-path>
+Options
+`, os.Args[0])
+		flag.PrintDefaults()
+	}
+
 	configFile := flag.String("config", "config.toml", "Set config path.")
 	isDebug := flag.Bool("debug", false, "If this flag is settle, output debug log!")
 	flag.Parse()
 
+	if flag.NArg() == 0 {
+		_, _ = fmt.Fprintln(os.Stderr, "zip file is not settle.")
+		flag.Usage()
+		os.Exit(2)
+	}
+
 	parsed := Arguments{
 		ConfigFile: *configFile,
 		IsDebug:    *isDebug,
-		ZipFile:    "",
-	}
-
-	if flag.NArg() > 0 {
-		parsed.ZipFile = flag.Arg(0)
+		ZipFile:    flag.Arg(0),
 	}
 
 	return &parsed
