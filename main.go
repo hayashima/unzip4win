@@ -2,26 +2,28 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
+	"github.com/ryosms/unzip4win/lib"
+	"github.com/yeka/zip"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"log"
 	"os"
-
-	"github.com/yeka/zip"
 )
 
 func main() {
-	configFile := flag.String("config", "config.toml", "")
-	flag.Parse()
+	args := unzip4win.ParseArgs()
 
-	fmt.Printf("%v\n", flag.Args())
-	fmt.Println(*configFile)
+	logger, err := unzip4win.AppLogger(args.IsDebug)
+	if err != nil {
+		log.Fatalf("Can't initialize logger: %v", err)
+	}
 
-	zipPath := flag.Arg(0)
-	fmt.Println(zipPath)
+	logger.Debug("argument is",
+		zap.String("config", args.ConfigFile),
+		zap.String("zip", args.ZipFile))
 
-	reader, err := zip.OpenReader(zipPath)
+	reader, err := zip.OpenReader(args.ZipFile)
 	if err != nil {
 		log.Fatal(err)
 	}
