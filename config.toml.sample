@@ -3,6 +3,7 @@
 # -----------------------------------------------------------------------------
 [output]
 saveCurent = true
+# FullPath only(DONOT USE `~`)
 outputPath = "/path/to/output/dir/if/save_current/is/false"
 
 [password]

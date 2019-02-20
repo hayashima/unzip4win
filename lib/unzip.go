@@ -28,7 +28,7 @@ func Unzip(zipPath string, config *Config, logger *zap.Logger) error {
 
 	startTime := time.Now()
 	password, nil := analyzePassword(reader.File[0], startTime, config, logger)
-	outputDir := filepath.Dir(zipPath)
+	outputDir := outputDir(zipPath, config.Output)
 
 	for _, f := range reader.File {
 		err := save(f, password, outputDir, logger)
@@ -40,14 +40,16 @@ func Unzip(zipPath string, config *Config, logger *zap.Logger) error {
 	return nil
 }
 
-func targetSpec(target time.Time, specs []SpecConfig) []SpecConfig {
+func targetSpec(target time.Time, specs []SpecConfig, logger *zap.Logger) []SpecConfig {
 	if specs == nil || len(specs) == 0 {
+		logger.Debug("No match specs")
 		return nil
 	}
 	if target.Sub(specs[0].StartDate) > 0 {
+		logger.Debug("Match spec", zap.Any("spec", specs[0]))
 		return specs
 	}
-	return targetSpec(target, specs[1:])
+	return targetSpec(target, specs[1:], logger)
 }
 
 func analyzePassword(f *zip.File, startDate time.Time, config *Config, logger *zap.Logger) (string, error) {
@@ -57,7 +59,7 @@ func analyzePassword(f *zip.File, startDate time.Time, config *Config, logger *z
 	specs := config.Spec[:]
 	for i := 0; i < config.Password.TryDays; i++ {
 		targetDate := startDate.Add(time.Duration(-24*i) * time.Hour)
-		specs := targetSpec(targetDate, specs)
+		specs := targetSpec(targetDate, specs, logger)
 		if specs == nil {
 			break
 		}
@@ -109,4 +111,11 @@ func save(f *zip.File, password string, dest string, logger *zap.Logger) error {
 		zap.Any("mode", f.Mode()))
 	err = ioutil.WriteFile(path, buf, f.Mode())
 	return err
+}
+
+func outputDir(zipFile string, config OutputConfig) string {
+	if config.SaveCurrent {
+		return filepath.Dir(zipFile)
+	}
+	return config.OutputPath
 }
