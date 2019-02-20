@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 
 	logger, err := unzip4win.AppLogger(args.IsDebug)
 	if err != nil {
-		log.Printf("Can't initialize logger: %v", err)
+		log.Printf("Can't initialize logger:\n %v", err)
 		exitWith(1)
 	}
 
@@ -26,13 +27,21 @@ func main() {
 
 	config, err := unzip4win.LoadConfig(args.ConfigFile)
 	if err != nil {
-		logger.Info("Can't parse config file.", zap.Error(err))
+		logger.Error("Can't parse config file.", zap.Error(err))
 		exitWith(1)
 	}
 	logger.Debug(fmt.Sprintf("config: %v", *config))
 
+	logger.Debug("extension", zap.String("ext", filepath.Ext(args.ZipFile)))
 	if !unzip4win.IsLookLikeZipFile(args.ZipFile) {
-		logger.Info("It seems to be not a zip file.", zap.String("zipPath", args.ZipFile))
+		logger.Error("It seems to be not a zip file.", zap.String("zipPath", args.ZipFile))
+		exitWith(1)
+	}
+	err = unzip4win.Unzip(args.ZipFile, config, logger)
+	if err != nil {
+		logger.Error("Failed unzip",
+			zap.String("zipPath", args.ZipFile),
+			zap.Error(err))
 		exitWith(1)
 	}
 
