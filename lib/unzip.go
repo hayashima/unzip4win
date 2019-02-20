@@ -5,6 +5,7 @@ import (
 	"github.com/yeka/zip"
 	"go.uber.org/zap"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"time"
 )
@@ -27,21 +28,13 @@ func Unzip(zipPath string, config *Config, logger *zap.Logger) error {
 
 	startTime := time.Now()
 	password, nil := analyzePassword(reader.File[0], startTime, config, logger)
+	outputDir := filepath.Dir(zipPath)
 
 	for _, f := range reader.File {
-		if f.IsEncrypted() {
-			f.SetPassword(*password)
-		}
-		r, err := f.Open()
+		err := save(f, password, outputDir, logger)
 		if err != nil {
 			return err
 		}
-		_, err = ioutil.ReadAll(r)
-		if err != nil {
-			return err
-		}
-		logger.Debug("Open", zap.String("file", f.Name))
-		_ = r.Close()
 	}
 
 	return nil
@@ -57,9 +50,9 @@ func targetSpec(target time.Time, specs []SpecConfig) []SpecConfig {
 	return targetSpec(target, specs[1:])
 }
 
-func analyzePassword(f *zip.File, startDate time.Time, config *Config, logger *zap.Logger) (*string, error) {
+func analyzePassword(f *zip.File, startDate time.Time, config *Config, logger *zap.Logger) (string, error) {
 	if !f.IsEncrypted() {
-		return nil, nil
+		return "", nil
 	}
 	specs := config.Spec[:]
 	for i := 0; i < config.Password.TryDays; i++ {
@@ -73,11 +66,11 @@ func analyzePassword(f *zip.File, startDate time.Time, config *Config, logger *z
 		f.SetPassword(password)
 		if tryOpen(f) {
 			logger.Debug("Match!", zap.String("password", password))
-			return &password, nil
+			return password, nil
 		}
 	}
 
-	return nil, errors.New("can't analyze password")
+	return "", errors.New("can't analyze password")
 }
 
 func tryOpen(f *zip.File) bool {
@@ -88,4 +81,32 @@ func tryOpen(f *zip.File) bool {
 	}
 	_, err = ioutil.ReadAll(r)
 	return err == nil
+}
+
+func save(f *zip.File, password string, dest string, logger *zap.Logger) error {
+	if f.IsEncrypted() {
+		f.SetPassword(password)
+	}
+	r, err := f.Open()
+	if err != nil {
+		return nil
+	}
+	defer func() { _ = r.Close() }()
+
+	path := filepath.Join(dest, f.Name)
+	if f.FileInfo().IsDir() {
+		logger.Debug("Create Dir", zap.String("dir", path))
+		return os.MkdirAll(path, 0755)
+	}
+
+	buf, err := ioutil.ReadAll(r)
+	if err != nil {
+		return err
+	}
+	logger.Debug("Save",
+		zap.String("file", path),
+		zap.Int("size", len(buf)),
+		zap.Any("mode", f.Mode()))
+	err = ioutil.WriteFile(path, buf, f.Mode())
+	return err
 }
