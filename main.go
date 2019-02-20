@@ -7,7 +7,6 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"os"
-	"path/filepath"
 )
 
 func main() {
@@ -30,7 +29,6 @@ func main() {
 	}
 	logger.Debug(fmt.Sprintf("config: %v", *config))
 
-	logger.Debug("extension", zap.String("ext", filepath.Ext(args.ZipFile)))
 	if !unzip4win.IsLookLikeZipFile(args.ZipFile) {
 		logger.Error("It seems to be not a zip file.", zap.String("zipPath", args.ZipFile))
 		exitWith(1)
