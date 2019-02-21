@@ -38,7 +38,7 @@ $ go get -u \
 1. clone this repository
 1. install dependencies
 1. edit config.toml as default parameters
-1. create assets.go
+1. create assets
 1. go build!
 
 ```bash
@@ -50,6 +50,6 @@ $ dep ensure
 $ cp config.toml.sample config.toml
 $ vi config.toml
 # edit for your environment
-$ go-assets-builder -p unzip4win config.toml > lib/assets.go
+$ go generate
 $ go build -o unzip4win main.go
 ```

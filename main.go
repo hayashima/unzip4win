@@ -9,6 +9,8 @@ import (
 	"os"
 )
 
+//go:generate go-assets-builder -p unzip4win -o lib/assets.go config.toml
+
 func main() {
 	args := unzip4win.ParseArgs()
 
