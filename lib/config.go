@@ -24,7 +24,7 @@ Options
 		flag.PrintDefaults()
 	}
 
-	configFile := flag.String("config", "config.toml", "Set config path.")
+	configFile := flag.String("config", "", "Set config path.")
 	isDebug := flag.Bool("debug", false, "If this flag is settle, output debug log!")
 	flag.Parse()
 
@@ -64,13 +64,26 @@ type SpecConfig struct {
 }
 
 func LoadConfig(configFile string) (*Config, error) {
-
 	var config Config
-	_, err := toml.DecodeFile(configFile, &config)
+	if len(configFile) == 0 {
+		f, err := Assets.Open("/config.toml")
+		if err != nil {
+			return nil, err
+		}
+		_, err = toml.DecodeReader(f, &config)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		_, err := toml.DecodeFile(configFile, &config)
+		if err != nil {
+			return nil, err
+		}
+	}
 	// order by Spec.StartDate DESC
 	sort.Sort(config)
 
-	return &config, err
+	return &config, nil
 }
 
 func (c Config) Len() int {
