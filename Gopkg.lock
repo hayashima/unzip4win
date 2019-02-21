@@ -11,6 +11,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:446f04b6b59c2cfacf8e9784c431afda6708d72a7a09eaefb2ab96d2b9cf8536"
+  name = "github.com/jessevdk/go-assets"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4f4301a06e153ff90e17793577ab6bf79f8dc5c5"
+
+[[projects]]
+  branch = "master"
   digest = "1:e83c0d96f068c6a9c8ac6430ace96637d8ee4afe5e4ebf121f9be274f00462c4"
   name = "github.com/yeka/zip"
   packages = ["."]
@@ -61,6 +69,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/BurntSushi/toml",
+    "github.com/jessevdk/go-assets",
     "github.com/yeka/zip",
     "go.uber.org/zap",
   ]
