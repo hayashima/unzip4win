@@ -24,7 +24,7 @@ Options
 		flag.PrintDefaults()
 	}
 
-	configFile := flag.String("config", "", "Set config path.")
+	configFile := flag.String("config", "", "Set path to customized config.toml.")
 	isDebug := flag.Bool("debug", false, "If this flag is settle, output debug log!")
 	flag.Parse()
 
