@@ -27,7 +27,10 @@ func Unzip(zipPath string, config *Config, logger *zap.Logger) error {
 	}()
 
 	startTime := time.Now()
-	password, nil := analyzePassword(reader.File[0], startTime, config, logger)
+	password, err := analyzePassword(reader.File[0], startTime, config, logger)
+	if err != nil {
+		return err
+	}
 	outputDir := outputDir(zipPath, config.Output)
 
 	for _, f := range reader.File {
