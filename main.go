@@ -30,12 +30,13 @@ func main() {
 		exitWith(1)
 	}
 	logger.Debug(fmt.Sprintf("config: %v", *config))
+	unzip4win.LibLogger = logger
 
 	if !unzip4win.IsLookLikeZipFile(args.ZipFile) {
 		logger.Error("It seems to be not a zip file.", zap.String("zipPath", args.ZipFile))
 		exitWith(1)
 	}
-	err = unzip4win.Unzip(args.ZipFile, config, logger)
+	err = unzip4win.Unzip(args.ZipFile, config)
 	if err != nil {
 		logger.Error("Failed unzip",
 			zap.String("zipPath", args.ZipFile),
