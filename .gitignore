@@ -49,3 +49,6 @@ fabric.properties
 
 config.toml
 assets.go
+
+*.docx
+!template.docx
