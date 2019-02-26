@@ -2,7 +2,7 @@
 # Unzip4win config file.
 # -----------------------------------------------------------------------------
 [output]
-saveCurent = true
+saveCurrent = true
 # FullPath only(DONOT USE `~`)
 outputPath = "/path/to/output/dir/if/save_current/is/false"
 

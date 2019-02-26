@@ -65,25 +65,55 @@ type SpecConfig struct {
 
 func LoadConfig(configFile string) (*Config, error) {
 	var config Config
-	if len(configFile) == 0 {
-		f, err := Assets.Open("/config.toml")
-		if err != nil {
-			return nil, err
-		}
-		_, err = toml.DecodeReader(f, &config)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		_, err := toml.DecodeFile(configFile, &config)
-		if err != nil {
-			return nil, err
-		}
+	err := loadDefaultConfig(&config)
+	if err != nil {
+		return nil, err
 	}
+	err = overrideConfig(configFile, &config)
+	if err != nil {
+		return nil, err
+	}
+
 	// order by Spec.StartDate DESC
 	sort.Sort(config)
 
 	return &config, nil
+}
+
+func loadDefaultConfig(config *Config) error {
+	f, err := Assets.Open("/config.toml")
+	if err != nil {
+		return err
+	}
+	_, err = toml.DecodeReader(f, config)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func overrideConfig(configFile string, config *Config) error {
+	if len(configFile) == 0 {
+		return nil
+	}
+	var override Config
+	meta, err := toml.DecodeFile(configFile, &override)
+	if err != nil {
+		return err
+	}
+	if meta.IsDefined("output", "saveCurrent") {
+		config.Output.SaveCurrent = override.Output.SaveCurrent
+	}
+	if meta.IsDefined("output", "outputPath") {
+		config.Output.OutputPath = override.Output.OutputPath
+	}
+	if meta.IsDefined("password", "tryDays") {
+		config.Password.TryDays = override.Password.TryDays
+	}
+	if meta.IsDefined("spec") {
+		config.Spec = override.Spec
+	}
+	return nil
 }
 
 func (c Config) Len() int {
