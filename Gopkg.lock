@@ -19,6 +19,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:374ce4704830a7b9729d8798bcb4ac796f9c7bbb6903950ec55b71332caffe31"
+  name = "github.com/saintfish/chardet"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3af4cd4741ca4f3eb0c407c034571a6fb0ea529c"
+
+[[projects]]
+  branch = "master"
   digest = "1:e83c0d96f068c6a9c8ac6430ace96637d8ee4afe5e4ebf121f9be274f00462c4"
   name = "github.com/yeka/zip"
   packages = ["."]
@@ -64,14 +72,32 @@
   pruneopts = "UT"
   revision = "a4c6cb3142f211c99e4bf4cd769535b29a9b616f"
 
+[[projects]]
+  digest = "1:5dff1a0d6e59c6ada3ab630d0926c4d7665a74a27c559e4001189ca2f5026d1c"
+  name = "golang.org/x/text"
+  packages = [
+    "encoding",
+    "encoding/internal",
+    "encoding/internal/identifier",
+    "encoding/japanese",
+    "internal/gen",
+    "transform",
+    "unicode/cldr",
+  ]
+  pruneopts = "UT"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/BurntSushi/toml",
     "github.com/jessevdk/go-assets",
+    "github.com/saintfish/chardet",
     "github.com/yeka/zip",
     "go.uber.org/zap",
+    "golang.org/x/text/encoding/japanese",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
