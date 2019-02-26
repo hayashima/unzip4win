@@ -66,11 +66,7 @@ type SpecConfig struct {
 func LoadConfig(configFile string) (*Config, error) {
 	var config Config
 	if len(configFile) == 0 {
-		f, err := Assets.Open("/config.toml")
-		if err != nil {
-			return nil, err
-		}
-		_, err = toml.DecodeReader(f, &config)
+		err := loadDefaultConfig(&config)
 		if err != nil {
 			return nil, err
 		}
@@ -84,6 +80,18 @@ func LoadConfig(configFile string) (*Config, error) {
 	sort.Sort(config)
 
 	return &config, nil
+}
+
+func loadDefaultConfig(config *Config) error {
+	f, err := Assets.Open("/config.toml")
+	if err != nil {
+		return err
+	}
+	_, err = toml.DecodeReader(f, config)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c Config) Len() int {
