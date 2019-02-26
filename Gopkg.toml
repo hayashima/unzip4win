@@ -44,3 +44,11 @@
 [[constraint]]
   branch = "master"
   name = "github.com/jessevdk/go-assets"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/saintfish/chardet"
+
+[[constraint]]
+  name = "golang.org/x/text"
+  version = "0.3.0"
