@@ -14,7 +14,7 @@ var decoders = map[string]*encoding.Decoder{
 }
 var detector = chardet.NewTextDetector()
 
-func decodeFileName(original string) (string, error) {
+func decodeString(original string) (string, error) {
 	detected, err := detector.DetectAll([]byte(original))
 	if err != nil {
 		return "", nil

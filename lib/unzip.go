@@ -98,7 +98,7 @@ func save(f *zip.File, password string, dest string) error {
 	}
 	defer func() { _ = r.Close() }()
 
-	decodedName, err := decodeFileName(f.Name)
+	decodedName, err := decodeString(f.Name)
 	if err != nil {
 		return err
 	}
