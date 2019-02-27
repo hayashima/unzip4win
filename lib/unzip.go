@@ -2,10 +2,8 @@ package unzip4win
 
 import (
 	"errors"
-	"github.com/saintfish/chardet"
 	"github.com/yeka/zip"
 	"go.uber.org/zap"
-	"golang.org/x/text/encoding/japanese"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -128,18 +126,4 @@ func outputDir(zipFile string, config OutputConfig) string {
 		return filepath.Dir(zipFile)
 	}
 	return config.OutputPath
-}
-
-var detector = chardet.NewTextDetector()
-var sjisDecoder = japanese.ShiftJIS.NewDecoder()
-
-func decodeFileName(original string) (string, error) {
-	analyzed, err := detector.DetectBest([]byte(original))
-	if err != nil {
-		return "", nil
-	}
-	if analyzed.Charset == "Shift_JIS" {
-		return sjisDecoder.String(original)
-	}
-	return original, nil
 }
