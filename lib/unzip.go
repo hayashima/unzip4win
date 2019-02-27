@@ -32,6 +32,10 @@ func Unzip(zipPath string, config *Config) error {
 		return err
 	}
 	outputDir := outputDir(zipPath, config.Output)
+	err = createDir(outputDir)
+	if err != nil {
+		return err
+	}
 
 	for _, f := range reader.File {
 		err := save(f, password, outputDir)
@@ -40,6 +44,14 @@ func Unzip(zipPath string, config *Config) error {
 		}
 	}
 
+	return nil
+}
+
+func createDir(path string) error {
+	_, err := os.Stat(path)
+	if err != nil {
+		return os.MkdirAll(path, 0755)
+	}
 	return nil
 }
 
@@ -106,7 +118,7 @@ func save(f *zip.File, password string, dest string) error {
 	path := filepath.Join(dest, decodedName)
 	if f.FileInfo().IsDir() {
 		debugLog("Create Dir", zap.String("dir", path))
-		return os.MkdirAll(path, 0755)
+		return createDir(path)
 	}
 
 	buf, err := ioutil.ReadAll(r)
