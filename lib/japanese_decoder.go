@@ -8,10 +8,11 @@ import (
 )
 
 var decoders = map[string]*encoding.Decoder{
-	"Shift_JIS":   japanese.ShiftJIS.NewDecoder(),
-	"EUC-JP":      japanese.EUCJP.NewDecoder(),
-	"ISO-2022-JP": japanese.ISO2022JP.NewDecoder(),
-	"UTF-8":       nil,
+	"Shift_JIS": japanese.ShiftJIS.NewDecoder(),
+	// now, support file name which is encoded with SJIS or UTF-8 only.
+	//"EUC-JP":      japanese.EUCJP.NewDecoder(),
+	//"ISO-2022-JP": japanese.ISO2022JP.NewDecoder(),
+	"UTF-8": nil,
 }
 var detector = chardet.NewTextDetector()
 
