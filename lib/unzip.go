@@ -2,10 +2,8 @@ package unzip4win
 
 import (
 	"errors"
-	"github.com/saintfish/chardet"
 	"github.com/yeka/zip"
 	"go.uber.org/zap"
-	"golang.org/x/text/encoding/japanese"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -34,6 +32,10 @@ func Unzip(zipPath string, config *Config) error {
 		return err
 	}
 	outputDir := outputDir(zipPath, config.Output)
+	err = createDir(outputDir)
+	if err != nil {
+		return err
+	}
 
 	for _, f := range reader.File {
 		err := save(f, password, outputDir)
@@ -42,6 +44,14 @@ func Unzip(zipPath string, config *Config) error {
 		}
 	}
 
+	return nil
+}
+
+func createDir(path string) error {
+	_, err := os.Stat(path)
+	if err != nil {
+		return os.MkdirAll(path, 0755)
+	}
 	return nil
 }
 
@@ -100,7 +110,7 @@ func save(f *zip.File, password string, dest string) error {
 	}
 	defer func() { _ = r.Close() }()
 
-	decodedName, err := decodeFileName(f.Name)
+	decodedName, err := decodeString(f.Name)
 	if err != nil {
 		return err
 	}
@@ -108,7 +118,7 @@ func save(f *zip.File, password string, dest string) error {
 	path := filepath.Join(dest, decodedName)
 	if f.FileInfo().IsDir() {
 		debugLog("Create Dir", zap.String("dir", path))
-		return os.MkdirAll(path, 0755)
+		return createDir(path)
 	}
 
 	buf, err := ioutil.ReadAll(r)
@@ -128,18 +138,4 @@ func outputDir(zipFile string, config OutputConfig) string {
 		return filepath.Dir(zipFile)
 	}
 	return config.OutputPath
-}
-
-var detector = chardet.NewTextDetector()
-var sjisDecoder = japanese.ShiftJIS.NewDecoder()
-
-func decodeFileName(original string) (string, error) {
-	analyzed, err := detector.DetectBest([]byte(original))
-	if err != nil {
-		return "", nil
-	}
-	if analyzed.Charset == "Shift_JIS" {
-		return sjisDecoder.String(original)
-	}
-	return original, nil
 }
