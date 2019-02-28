@@ -28,4 +28,4 @@ jobs:
           paths:
             - ~/.cache/go-build
       - store_test_results:
-          path: $/tmp/test-results
+          path: /tmp/test-results
