@@ -1,0 +1,14 @@
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.12
+
+    working_directory: /go/src/github.com/ryosms/unzip4win
+    steps:
+      - checkout
+      - run: go get -v github.com/jessevdk/go-assets-builder
+      - run: go get -v -t -d ./...
+      - run: touch config.toml && go generate -v
+      - run: go test -v -cover ./...

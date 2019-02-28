@@ -1,0 +1,3 @@
+[output]
+saveCurrent = true
+outputPath = "/overrided/output/path"

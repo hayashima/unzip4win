@@ -97,6 +97,7 @@
     "github.com/saintfish/chardet",
     "github.com/yeka/zip",
     "go.uber.org/zap",
+    "golang.org/x/text/encoding",
     "golang.org/x/text/encoding/japanese",
   ]
   solver-name = "gps-cdcl"

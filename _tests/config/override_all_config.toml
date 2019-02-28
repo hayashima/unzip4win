@@ -1,0 +1,10 @@
+[output]
+saveCurrent = true
+outputPath = "/overrided/output/path"
+
+[password]
+tryDays = 365
+
+[[spec]]
+format = "overridedpassword"
+startDate = 2019-02-01
