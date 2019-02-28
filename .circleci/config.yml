@@ -5,10 +5,27 @@ jobs:
     docker:
       - image: circleci/golang:1.12
 
+    environment:
+      TEST_RESULTS: /tmp/test-results
+
     working_directory: /go/src/github.com/ryosms/unzip4win
     steps:
       - checkout
+      - run: mkdir -p ${TEST_RESULTS}
+      - restore_cache:
+          keys:
+            - v1-pkg-cache
       - run: go get -v github.com/jessevdk/go-assets-builder
+      - run: go get -v github.com/jstemmer/go-junit-report
       - run: go get -v -t -d ./...
       - run: touch config.toml && go generate -v
-      - run: go test -v -cover ./...
+      - run:
+          command: |
+            trap "go-junit-report < ${TEST_RESULTS}/go-test.out > ${TEST_RESULTS}/go-test-report.xml" EXIT
+            go test -v -cover ./... | tee ${TEST_RESULTS}/go-test.out
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - ~/.cache/go-build
+      - store_test_results:
+          path: $/tmp/test-results
