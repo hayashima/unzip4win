@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/unicode/norm"
 )
 
 var decoders = map[string]*encoding.Decoder{
@@ -27,11 +28,11 @@ func decodeString(original string) (string, error) {
 		if contain {
 			debugLog("matched encoding", zap.Any("encoding", e))
 			if decoder == nil {
-				return original, nil
+				break
 			} else {
 				return decoder.String(original)
 			}
 		}
 	}
-	return original, nil
+	return string(norm.NFC.Bytes([]byte(original))), nil
 }
