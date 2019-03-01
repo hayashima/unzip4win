@@ -103,6 +103,7 @@ func TestUnzip(t *testing.T) {
 		Password: PasswordConfig{TryDays: 10},
 		Spec:     []SpecConfig{},
 	}
+	LibLogger, _ = AppLogger(true)
 
 	t.Run("utf-8 japanese file name", func(t *testing.T) {
 		err := Unzip(filepath.Join(zipDir, "jp_file_utf8.zip"), &config)
