@@ -26,6 +26,6 @@ func TestDecodeString_ShiftJIS(t *testing.T) {
 }
 
 func loadTestFile(filename string) string {
-	c, _ := ioutil.ReadFile(filepath.Join("..", "_tests", "decoder", filename))
+	c, _ := ioutil.ReadFile(filepath.Join("..", "testdata", "decoder", filename))
 	return *(*string)(unsafe.Pointer(&c))
 }

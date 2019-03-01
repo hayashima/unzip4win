@@ -66,17 +66,17 @@ func TestTargetSpec(t *testing.T) {
 
 func TestOutputDir(t *testing.T) {
 	t.Run("output current is true", func(t *testing.T) {
-		zipPath := filepath.Join("..", "_tests", "zip", "test.zip")
+		zipPath := filepath.Join("..", "testdata", "zip", "test.zip")
 		actual := outputDir(zipPath, OutputConfig{SaveCurrent: true})
-		expected := filepath.Join("..", "_tests", "zip")
+		expected := filepath.Join("..", "testdata", "zip")
 		if actual != expected {
 			t.Errorf("expected is %v, but actual is %v", expected, actual)
 		}
 	})
 
 	t.Run("output current is false", func(t *testing.T) {
-		zipPath := filepath.Join("..", "_tests", "zip", "test.zip")
-		expected := filepath.Join("..", "_tests", "zip", "output")
+		zipPath := filepath.Join("..", "testdata", "zip", "test.zip")
+		expected := filepath.Join("..", "testdata", "zip", "output")
 		actual := outputDir(zipPath, OutputConfig{SaveCurrent: false, OutputPath: expected})
 		if actual != expected {
 			t.Errorf("expected is %v, but actual is %v", expected, actual)
