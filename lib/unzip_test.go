@@ -1,6 +1,7 @@
 package unzip4win
 
 import (
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -86,4 +87,82 @@ func TestOutputDir(t *testing.T) {
 
 func createDate(year int, month time.Month, day int) time.Time {
 	return time.Date(year, month, day, 0, 0, 0, 0, time.Local)
+}
+
+func TestUnzip(t *testing.T) {
+	zipDir := filepath.Join("..", "testdata", "zip")
+	outputDir := filepath.Join("..", "out", "zip")
+	if exists(outputDir) {
+		err := os.RemoveAll(outputDir)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	config := Config{
+		Output:   OutputConfig{SaveCurrent: false, OutputPath: outputDir},
+		Password: PasswordConfig{TryDays: 10},
+		Spec:     []SpecConfig{},
+	}
+
+	t.Run("utf-8 japanese file name", func(t *testing.T) {
+		err := Unzip(filepath.Join(zipDir, "jp_file_utf8.zip"), &config)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !exists(filepath.Join(outputDir, "日本語ファイル名_utf8.txt")) {
+			t.Error("wanted file `日本語ファイル名_utf8.txt` is not unzipped.")
+		}
+	})
+
+	t.Run("utf-8 japanese dir and file names", func(t *testing.T) {
+		err := Unzip(filepath.Join(zipDir, "jp_dir_utf8.zip"), &config)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !exists(filepath.Join(outputDir, "日本語ディレクトリ_utf8")) {
+			t.Error("wanted dir `日本語ディレクトリ_utf8` is not unzipped.")
+		}
+		if !exists(filepath.Join(outputDir, "日本語ディレクトリ_utf8", "日本語ファイル名_utf8.txt")) {
+			t.Error("wanted file `日本語ディレクトリ_utf8/日本語ファイル名_utf8.txt` is not unzipped.")
+		}
+	})
+
+	t.Run("sjis japanese file name", func(t *testing.T) {
+		err := Unzip(filepath.Join(zipDir, "jp_file_sjis.zip"), &config)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !exists(filepath.Join(outputDir, "日本語ファイル_sjis.txt")) {
+			t.Error("wanted file `日本語ファイル_sjis.txt` is not unzipped.")
+		}
+	})
+
+	t.Run("sjis japanese dir and file names", func(t *testing.T) {
+		err := Unzip(filepath.Join(zipDir, "jp_dir_sjis.zip"), &config)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !exists(filepath.Join(outputDir, "日本語ディレクトリ_sjis")) {
+			t.Error("wanted dir `日本語ディレクトリ_sjis` is not unzipped.")
+		}
+		if !exists(filepath.Join(outputDir, "日本語ディレクトリ_sjis", "日本語ファイル_sjis.txt")) {
+			t.Error("wanted file `日本語ディレクトリ_sjis/日本語ファイル_sjis.txt` is not unzipped.")
+		}
+	})
+
+	t.Run("password zip created by zip4win", func(t *testing.T) {
+		config.Spec = []SpecConfig{{Format: "unzip", StartDate: createDate(2019, time.January, 1)}}
+		err := Unzip(filepath.Join(zipDir, "jp_file_zip4win.zip"), &config)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !exists(filepath.Join(outputDir, "日本語ファイル名_zip4win.txt")) {
+			t.Error("wanted file `日本語ファイル名_zip4win.txt` is not unzipped.")
+		}
+	})
+}
+
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
