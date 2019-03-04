@@ -13,6 +13,10 @@ touch config.toml
 go generate -v
 echo 'Building binary for mac'
 go build -v -o out/unzip4win/unzip4win main.go
+echo 'Zipping...'
+zip out/unzip4win/unzip4win_darwin.zip out/unzip4win/unzip4win
 echo 'Building binary for windows'
 GOOS=windows GOARCH=amd64 go build -v -o out/unzip4win/unzip4win.exe main.go
+echo 'Zipping...'
+zip out/unzip4win/unzip4win_windows.zip out/unzip4win/unzip4win.exe
 echo 'Finish'
