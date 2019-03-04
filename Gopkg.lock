@@ -73,7 +73,7 @@
   revision = "a4c6cb3142f211c99e4bf4cd769535b29a9b616f"
 
 [[projects]]
-  digest = "1:5dff1a0d6e59c6ada3ab630d0926c4d7665a74a27c559e4001189ca2f5026d1c"
+  digest = "1:4384be4acd5d1340ae04497808fc2d9e594bd0c290de34301660a00564d437ff"
   name = "golang.org/x/text"
   packages = [
     "encoding",
@@ -81,8 +81,11 @@
     "encoding/internal/identifier",
     "encoding/japanese",
     "internal/gen",
+    "internal/triegen",
+    "internal/ucd",
     "transform",
     "unicode/cldr",
+    "unicode/norm",
   ]
   pruneopts = "UT"
   revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
@@ -99,6 +102,7 @@
     "go.uber.org/zap",
     "golang.org/x/text/encoding",
     "golang.org/x/text/encoding/japanese",
+    "golang.org/x/text/unicode/norm",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

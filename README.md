@@ -1,5 +1,7 @@
 # unzip4win
 
+[![CircleCI](https://circleci.com/gh/ryosms/unzip4win.svg?style=svg)](https://circleci.com/gh/ryosms/unzip4win)
+
 ref: [kazuhisa/zip4win](https://github.com/kazuhisa/zip4win)
 
 ## Usage

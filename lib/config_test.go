@@ -56,5 +56,5 @@ func TestOverrideConfig(t *testing.T) {
 }
 
 func configPath(name string) string {
-	return filepath.Join("..", "_tests", "config", name)
+	return filepath.Join("..", "testdata", "config", name)
 }
