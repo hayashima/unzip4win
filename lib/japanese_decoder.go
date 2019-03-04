@@ -34,5 +34,5 @@ func decodeString(original string) (string, error) {
 			}
 		}
 	}
-	return string(norm.NFC.Bytes([]byte(original))), nil
+	return norm.NFC.String(original), nil
 }
