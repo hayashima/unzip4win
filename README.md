@@ -46,7 +46,7 @@ $ go get -u \
 ```bash
 $ mkdir -p ${GOPATH}/src/github.com/ryosms
 $ cd ${GOPATH}/src/github.com/ryosms
-$ clone https://github.com/ryosms/unzip4win.git
+$ git clone https://github.com/ryosms/unzip4win.git
 $ cd unzip4win
 $ dep ensure
 $ cp config.toml.sample config.toml
