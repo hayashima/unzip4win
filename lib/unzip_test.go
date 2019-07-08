@@ -160,6 +160,14 @@ func TestUnzip(t *testing.T) {
 			t.Error("wanted file `日本語ファイル名_zip4win.txt` is not unzipped.")
 		}
 	})
+
+	t.Run("directory is top in zip", func(t *testing.T) {
+		config.Spec = []SpecConfig{{Format: "unzip", StartDate: createDate(2019, time.January, 1)}}
+		err := Unzip(filepath.Join(zipDir, "dir_is_top.zip"), &config)
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
 }
 
 func exists(path string) bool {
