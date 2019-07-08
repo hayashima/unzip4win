@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/ryosms/unzip4win/lib"
 	"go.uber.org/zap"
 	"log"
@@ -16,7 +17,7 @@ func main() {
 
 	logger, err := unzip4win.AppLogger(args.IsDebug)
 	if err != nil {
-		log.Printf("Can't initialize logger:\n %v", err)
+		log.Printf("Can't initialize logger:\n %#v", errors.WithStack(err))
 		exitWith(1)
 	}
 
@@ -26,7 +27,7 @@ func main() {
 
 	config, err := unzip4win.LoadConfig(args.ConfigFile)
 	if err != nil {
-		logger.Error("Can't parse config file.", zap.Error(err))
+		logger.Error("Can't parse config file.", zap.Error(errors.WithStack(err)))
 		exitWith(1)
 	}
 	logger.Debug(fmt.Sprintf("config: %v", *config))
@@ -40,7 +41,7 @@ func main() {
 	if err != nil {
 		logger.Error("Failed unzip",
 			zap.String("zipPath", args.ZipFile),
-			zap.Error(err))
+			zap.Error(errors.WithStack(err)))
 		exitWith(1)
 	}
 

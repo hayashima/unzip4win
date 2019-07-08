@@ -1,7 +1,7 @@
 package unzip4win
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"github.com/yeka/zip"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -19,7 +19,7 @@ func Unzip(zipPath string, config *Config) error {
 
 	reader, err := zip.OpenReader(zipPath)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	defer func() {
 		debugLog("Close")
@@ -29,18 +29,18 @@ func Unzip(zipPath string, config *Config) error {
 	startTime := time.Now()
 	password, err := analyzePassword(reader.File[0], startTime, config)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	outputDir := outputDir(zipPath, config.Output)
 	err = createDir(outputDir)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	for _, f := range reader.File {
 		err := save(f, password, outputDir)
 		if err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 	}
 
@@ -106,13 +106,13 @@ func save(f *zip.File, password string, dest string) error {
 	}
 	r, err := f.Open()
 	if err != nil {
-		return nil
+		return errors.WithStack(err)
 	}
 	defer func() { _ = r.Close() }()
 
 	decodedName, err := decodeString(f.Name)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 
 	path := filepath.Join(dest, decodedName)
@@ -123,14 +123,14 @@ func save(f *zip.File, password string, dest string) error {
 
 	buf, err := ioutil.ReadAll(r)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	debugLog("Save",
 		zap.String("file", path),
 		zap.Int("size", len(buf)),
 		zap.Any("mode", f.Mode()))
 	err = ioutil.WriteFile(path, buf, f.Mode())
-	return err
+	return errors.WithStack(err)
 }
 
 func outputDir(zipFile string, config OutputConfig) string {

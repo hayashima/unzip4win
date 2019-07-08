@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/BurntSushi/toml"
+	"github.com/pkg/errors"
 	"os"
 	"sort"
 	"time"
@@ -67,11 +68,11 @@ func LoadConfig(configFile string) (*Config, error) {
 	var config Config
 	err := loadDefaultConfig(&config)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 	err = overrideConfig(configFile, &config)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	// order by Spec.StartDate DESC
@@ -83,11 +84,11 @@ func LoadConfig(configFile string) (*Config, error) {
 func loadDefaultConfig(config *Config) error {
 	f, err := Assets.Open("/config.toml")
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	_, err = toml.DecodeReader(f, config)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	return nil
 }
@@ -99,7 +100,7 @@ func overrideConfig(configFile string, config *Config) error {
 	var override Config
 	meta, err := toml.DecodeFile(configFile, &override)
 	if err != nil {
-		return err
+		return errors.WithStack(err)
 	}
 	if meta.IsDefined("output", "saveCurrent") {
 		config.Output.SaveCurrent = override.Output.SaveCurrent
