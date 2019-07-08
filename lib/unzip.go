@@ -17,6 +17,12 @@ func IsLookLikeZipFile(zipPath string) bool {
 func Unzip(zipPath string, config *Config) error {
 	debugLog("Start unzip!")
 
+	outputDir := outputDir(zipPath, config.Output)
+	err := createDir(outputDir)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
 	reader, err := zip.OpenReader(zipPath)
 	if err != nil {
 		return errors.WithStack(err)
@@ -26,19 +32,9 @@ func Unzip(zipPath string, config *Config) error {
 		_ = reader.Close()
 	}()
 
-	startTime := time.Now()
-	password, err := analyzePassword(reader.File[0], startTime, config)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	outputDir := outputDir(zipPath, config.Output)
-	err = createDir(outputDir)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
+	var password string
 	for _, f := range reader.File {
-		err := save(f, password, outputDir)
+		password, err = unzipFile(f, password, outputDir, config)
 		if err != nil {
 			return errors.WithStack(err)
 		}
@@ -80,8 +76,7 @@ func analyzePassword(f *zip.File, startDate time.Time, config *Config) (string, 
 		}
 		password := targetDate.Format(specs[0].Format)
 		debugLog("try:", zap.String("password", password))
-		f.SetPassword(password)
-		if tryOpen(f) {
+		if tryOpen(f, password) {
 			debugLog("Match!", zap.String("password", password))
 			return password, nil
 		}
@@ -90,7 +85,8 @@ func analyzePassword(f *zip.File, startDate time.Time, config *Config) (string, 
 	return "", errors.New("can't analyze password")
 }
 
-func tryOpen(f *zip.File) bool {
+func tryOpen(f *zip.File, password string) bool {
+	f.SetPassword(password)
 	r, err := f.Open()
 	defer func() { _ = r.Close() }()
 	if err != nil {
@@ -100,37 +96,43 @@ func tryOpen(f *zip.File) bool {
 	return err == nil
 }
 
-func save(f *zip.File, password string, dest string) error {
-	if f.IsEncrypted() {
-		f.SetPassword(password)
+func unzipFile(f *zip.File, password string, outputDir string, config *Config) (newPassword string, err error) {
+	decodedName, err := decodeString(f.Name)
+	if err != nil {
+		return "", errors.WithStack(err)
 	}
+
+	path := filepath.Join(outputDir, decodedName)
+	if f.FileInfo().IsDir() {
+		debugLog("Create Dir", zap.String("dir", path))
+		return "", createDir(path)
+	}
+
+	if f.IsEncrypted() {
+		if !tryOpen(f, password) {
+			newPassword, err = analyzePassword(f, time.Now(), config)
+			if err != nil {
+				return "", errors.WithStack(err)
+			}
+		}
+	}
+
 	r, err := f.Open()
 	if err != nil {
-		return errors.WithStack(err)
+		return "", errors.WithStack(err)
 	}
 	defer func() { _ = r.Close() }()
 
-	decodedName, err := decodeString(f.Name)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	path := filepath.Join(dest, decodedName)
-	if f.FileInfo().IsDir() {
-		debugLog("Create Dir", zap.String("dir", path))
-		return createDir(path)
-	}
-
 	buf, err := ioutil.ReadAll(r)
 	if err != nil {
-		return errors.WithStack(err)
+		return "", errors.WithStack(err)
 	}
 	debugLog("Save",
 		zap.String("file", path),
 		zap.Int("size", len(buf)),
 		zap.Any("mode", f.Mode()))
 	err = ioutil.WriteFile(path, buf, f.Mode())
-	return errors.WithStack(err)
+	return newPassword, errors.WithStack(err)
 }
 
 func outputDir(zipFile string, config OutputConfig) string {
