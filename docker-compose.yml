@@ -1,0 +1,13 @@
+---
+version: '3'
+services:
+  builder:
+    container_name: unzip4win-builder
+    image: golang:1.12
+    environment:
+      GO111MODULE: "on"
+      TZ: ${UNZIP4WIN_TZ:-Asia/Tokyo}
+    volumes:
+      - ./:/go/src/unzip4win
+    working_dir: /go/src/unzip4win
+    command: make
