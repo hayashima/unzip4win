@@ -105,11 +105,13 @@ func unzipFile(f *zip.File, password string, outputDir string, config *Config) (
 	path := filepath.Join(outputDir, decodedName)
 	if f.FileInfo().IsDir() {
 		debugLog("Create Dir", zap.String("dir", path))
-		return "", createDir(path)
+		return password, createDir(path)
 	}
 
 	if f.IsEncrypted() {
-		if !tryOpen(f, password) {
+		if tryOpen(f, password) {
+			newPassword = password
+		} else {
 			newPassword, err = analyzePassword(f, time.Now(), config)
 			if err != nil {
 				return "", errors.WithStack(err)
@@ -132,6 +134,7 @@ func unzipFile(f *zip.File, password string, outputDir string, config *Config) (
 		zap.Int("size", len(buf)),
 		zap.Any("mode", f.Mode()))
 	err = ioutil.WriteFile(path, buf, f.Mode())
+
 	return newPassword, errors.WithStack(err)
 }
 
