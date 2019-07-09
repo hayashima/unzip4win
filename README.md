@@ -37,6 +37,47 @@ $ go get -u \
 
 ### Build
 
+##### build with make
+
+If you can use `make` command, you can build using `make`.
+
+1. clone this repository
+1. edit config.toml as default parameters
+1. make
+
+```bash
+$ mkdir -p ${GOPATH}/src/github.com/ryosms
+$ cd ${GOPATH}/src/github.com/ryosms
+$ git clone https://github.com/ryosms/unzip4win.git
+$ cd unzip4win
+$ cp config.toml.sample config.toml
+$ vi config.toml
+# edit for your environment
+$ make
+```
+
+##### build with docker
+
+The repository contains `docker-compose.yml` for building binaries.
+If you install `docker` and `docker-compose`, you can build binaries with docker.
+
+1. clone this repository
+1. edit config.toml as default parameters
+1. docker-compose up
+
+```bash
+$ mkdir -p ${GOPATH}/src/github.com/ryosms
+$ cd ${GOPATH}/src/github.com/ryosms
+$ git clone https://github.com/ryosms/unzip4win.git
+$ cd unzip4win
+$ cp config.toml.sample config.toml
+$ vi config.toml
+# edit for your environment
+$ docker-compose up
+```
+
+##### other
+
 1. clone this repository
 1. install dependencies
 1. edit config.toml as default parameters
