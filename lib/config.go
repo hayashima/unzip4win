@@ -16,7 +16,7 @@ type Arguments struct {
 	ZipFile    string
 }
 
-func ParseArgs() *Arguments {
+func ParseArgs(version string) *Arguments {
 	flag.Usage = func() {
 		_, _ = fmt.Fprintf(os.Stderr, `Usage of Unzip4win:
   %s [OPITIONS] <zip-file-path>
@@ -27,7 +27,13 @@ Options
 
 	configFile := flag.String("config", "", "Set path to customized config.toml.")
 	isDebug := flag.Bool("debug", false, "If this flag is settle, output debug log!")
+	showVersion := flag.Bool("version", false, "Show version and exit app")
 	flag.Parse()
+
+	if *showVersion {
+		fmt.Printf("Unzip4win version: %s\n", version)
+		os.Exit(0)
+	}
 
 	if flag.NArg() == 0 {
 		_, _ = fmt.Fprintln(os.Stderr, "zip file is not settle.")

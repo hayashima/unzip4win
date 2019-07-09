@@ -21,21 +21,63 @@ Options
 
 ### Requirement
 
+This app using `go module`.
+If you clone into `GOPATH`, set ENVIRONMENT `GO111MODULE=on`.
+
 #### global golang commands
 
 install commands below with `go get`
 
-* dep
 * go-assets-builder
 
 ```bash
 $ go get -u \
-    github.com/golang/dep/cmd/dep \
     github.com/jessevdk/go-assets-builder
     
 ```
 
 ### Build
+
+##### build with make
+
+If you can use `make` command, you can build using `make`.
+
+1. clone this repository
+1. edit config.toml as default parameters
+1. make
+
+```bash
+$ mkdir -p ${GOPATH}/src/github.com/ryosms
+$ cd ${GOPATH}/src/github.com/ryosms
+$ git clone https://github.com/ryosms/unzip4win.git
+$ cd unzip4win
+$ cp config.toml.sample config.toml
+$ vi config.toml
+# edit for your environment
+$ make
+```
+
+##### build with docker
+
+The repository contains `docker-compose.yml` for building binaries.
+If you install `docker` and `docker-compose`, you can build binaries with docker.
+
+1. clone this repository
+1. edit config.toml as default parameters
+1. docker-compose up
+
+```bash
+$ mkdir -p ${GOPATH}/src/github.com/ryosms
+$ cd ${GOPATH}/src/github.com/ryosms
+$ git clone https://github.com/ryosms/unzip4win.git
+$ cd unzip4win
+$ cp config.toml.sample config.toml
+$ vi config.toml
+# edit for your environment
+$ docker-compose up
+```
+
+##### other
 
 1. clone this repository
 1. install dependencies
@@ -48,7 +90,7 @@ $ mkdir -p ${GOPATH}/src/github.com/ryosms
 $ cd ${GOPATH}/src/github.com/ryosms
 $ git clone https://github.com/ryosms/unzip4win.git
 $ cd unzip4win
-$ dep ensure
+$ go mod download
 $ cp config.toml.sample config.toml
 $ vi config.toml
 # edit for your environment

@@ -10,10 +10,12 @@ import (
 	"os"
 )
 
+var version = "latest"
+
 //go:generate go-assets-builder -p unzip4win -o lib/assets.go config.toml
 
 func main() {
-	args := unzip4win.ParseArgs()
+	args := unzip4win.ParseArgs(version)
 
 	logger, err := unzip4win.AppLogger(args.IsDebug)
 	if err != nil {
