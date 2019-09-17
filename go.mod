@@ -1,4 +1,4 @@
-module github.com/ryosms/unzip4win
+module github.com/hayashima/unzip4win
 
 go 1.12
 
