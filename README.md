@@ -1,6 +1,6 @@
 # unzip4win
 
-[![CircleCI](https://circleci.com/gh/ryosms/unzip4win.svg?style=svg)](https://circleci.com/gh/ryosms/unzip4win)
+[![CircleCI](https://circleci.com/gh/hayashima/unzip4win.svg?style=svg)](https://circleci.com/gh/hayashima/unzip4win)
 
 ref: [kazuhisa/zip4win](https://github.com/kazuhisa/zip4win)
 
@@ -47,9 +47,9 @@ If you can use `make` command, you can build using `make`.
 1. make
 
 ```bash
-$ mkdir -p ${GOPATH}/src/github.com/ryosms
-$ cd ${GOPATH}/src/github.com/ryosms
-$ git clone https://github.com/ryosms/unzip4win.git
+$ mkdir -p ${GOPATH}/src/github.com/hayashima
+$ cd ${GOPATH}/src/github.com/hayashima
+$ git clone https://github.com/hayashima/unzip4win.git
 $ cd unzip4win
 $ cp config.toml.sample config.toml
 $ vi config.toml
@@ -67,9 +67,9 @@ If you install `docker` and `docker-compose`, you can build binaries with docker
 1. docker-compose up
 
 ```bash
-$ mkdir -p ${GOPATH}/src/github.com/ryosms
-$ cd ${GOPATH}/src/github.com/ryosms
-$ git clone https://github.com/ryosms/unzip4win.git
+$ mkdir -p ${GOPATH}/src/github.com/hayashima
+$ cd ${GOPATH}/src/github.com/hayashima
+$ git clone https://github.com/hayashima/unzip4win.git
 $ cd unzip4win
 $ cp config.toml.sample config.toml
 $ vi config.toml
@@ -86,9 +86,9 @@ $ docker-compose up
 1. go build!
 
 ```bash
-$ mkdir -p ${GOPATH}/src/github.com/ryosms
-$ cd ${GOPATH}/src/github.com/ryosms
-$ git clone https://github.com/ryosms/unzip4win.git
+$ mkdir -p ${GOPATH}/src/github.com/hayashima
+$ cd ${GOPATH}/src/github.com/hayashima
+$ git clone https://github.com/hayashima/unzip4win.git
 $ cd unzip4win
 $ go mod download
 $ cp config.toml.sample config.toml
