@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/hayashima/unzip4win/lib"
 	"github.com/pkg/errors"
-	"github.com/ryosms/unzip4win/lib"
 	"go.uber.org/zap"
 	"log"
 	"os"
