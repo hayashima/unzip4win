@@ -10,8 +10,17 @@ Unzip4winは、「固定の文字列と日付文字列を組み合わせる」�
 * password20190222
 * 20190222password
 * pass20190222word
+\
 
-# 使い方
+### 目次
+
+1. [使い方](#usage)
+1. [インストール（アップグレード）方法](#how_to_install)
+    * [ショートカットを作成する](#shortcut)
+    * [右クリックの「送る」に追加する](#sendto)
+1. [Windows Defenderにブロックされた場合](#defender)
+
+# 使い方 {#usage}
 
 PC上のUnzip4Winのアプリケーションファイル（もしくはそのショートカット）へZIPファイルをDrag & Dropするだけで展開します。
 [右クリックの「送る」に追加する](#sendto)を実施している場合は、ZIPファイルを右クリックしてunzip4winへ「送る」だけで展開も可能です。
@@ -23,7 +32,7 @@ PC上のUnzip4Winのアプリケーションファイル（もしくはそのシ
 試行回数以内にパスワードが一致しない場合は展開に失敗します。
 
 
-# インストール（アップグレード）方法
+# インストール（アップグレード）方法 {#how_to_install}
 
 入手したUnzip4Winのzipファイル（unzip4win_windows.zip）を適当なフォルダで展開します。
 以下、 `マイドキュメント`配下に展開するものとして説明します。
@@ -49,6 +58,7 @@ PC上のUnzip4Winのアプリケーションファイル（もしくはそのシ
     ![](images/win/install/05_upgrade.png)
     
 1. 以上でインストール（アップグレード）は完了です。
+\
 
 ### ショートカットを作成する {#shortcut}
 
@@ -61,7 +71,7 @@ PC上のUnzip4Winのアプリケーションファイル（もしくはそのシ
 1. 必要に応じてショートカットの名前を変更します。
 
     ![](images/win/shortcut/01_create_shortcut.png)
-
+\
 
 ### 右クリックの「送る」に追加する {#sendto}
 
@@ -84,9 +94,10 @@ PC上のUnzip4Winのアプリケーションファイル（もしくはそのシ
 1. 必要に応じてショートカットの名前を変更します。
     * 変更した名前が「送る」のメニューに表示されます。画像では名前を「ZIP展開ツール」にしています。
 
-    ![](images/win/shortcut/05_sendto_menu.png){ width=50% }
+    ![](images/win/shortcut/05_sendto_menu.png)
 
-# Windows Defenderにブロックされた場合
+
+# Windows Defenderにブロックされた場合 {#defender}
 
 Windows 10を使用している場合、インストール・アップデート後の初回起動時にWindows DefenderによってUnzip4Winの実行がブロックされることがあります。
 
