@@ -86,3 +86,12 @@ PC上のUnzip4Winのアプリケーションファイル（もしくはそのシ
 
     ![](images/win/shortcut/05_sendto_menu.png){ width=50% }
 
+# Windows Defenderにブロックされた場合
+
+Windows 10を使用している場合、インストール・アップデート後の初回起動時にWindows DefenderによってUnzip4Winの実行がブロックされることがあります。
+
+![](images/win/defender/01_defender.png)
+
+その場合には、「`詳細情報`」をクリックすることで「`実行`」することができます。
+
+![](images/win/defender/02_execute.png)
